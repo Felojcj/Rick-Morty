@@ -9,15 +9,24 @@ import CharacterCard from "../CharacterCard/CharacterCard";
 
 const Home = () => {
   const [characters, setCharacters] = useState([]);
+  const [url, setUrl] = useState("https://rickandmortyapi.com/api/character");
+  const [pagination, setPagination] = useState({
+    prev: "",
+    next: "",
+  });
 
   useEffect(() => {
     getCharacters();
-  }, []);
+  }, [url]);
 
   const getCharacters = () => {
-    axios
-      .get("https://rickandmortyapi.com/api/character")
-      .then((data) => setCharacters(data.data.results));
+    axios.get(url).then((data) => {
+      setCharacters(data.data.results);
+      setPagination({
+        prev: data.data.info.prev,
+        next: data.data.info.next,
+      });
+    });
   };
 
   return (
@@ -25,23 +34,33 @@ const Home = () => {
       <Typography variant="h1" component="h1" sx={{ fontWeight: "bold" }}>
         Rick & Morty
       </Typography>
-      {characters.map((character, index) => (
-        <CharacterCard character={character} key={index} />
-      ))}
-      <IconButton
-        color="primary"
-        aria-label="upload picture"
-        component="label"
-      >
-        <KeyboardDoubleArrowLeftIcon />
-      </IconButton>
-      <IconButton
-        color="primary"
-        aria-label="upload picture"
-        component="label"
-      >
-        <KeyboardDoubleArrowRightIcon />
-      </IconButton>
+      <div className="container text-center">
+        <div className="row">
+          {characters.map((character, index) => (
+            <CharacterCard character={character} key={index} />
+          ))}
+        </div>
+      </div>
+      {pagination.prev ? (
+        <IconButton
+          color="primary"
+          aria-label="upload picture"
+          component="label"
+          onClick={() => setUrl(pagination.prev)}
+        >
+          <KeyboardDoubleArrowLeftIcon />
+        </IconButton>
+      ) : null}
+      {pagination.next ? (
+        <IconButton
+          color="primary"
+          aria-label="upload picture"
+          component="label"
+          onClick={() => setUrl(pagination.next)}
+        >
+          <KeyboardDoubleArrowRightIcon />
+        </IconButton>
+      ) : null}
     </React.Fragment>
   );
 };

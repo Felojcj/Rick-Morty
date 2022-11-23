@@ -7,7 +7,7 @@ import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
 const CharacterCard = ({ character }) => {
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 345 }} className="col-3 mt-3">
       <CardMedia
         component="img"
         alt="green iguana"
